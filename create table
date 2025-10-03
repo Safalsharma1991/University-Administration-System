@@ -1,0 +1,54 @@
+create database mgmuniversity
+use mgmuniversity
+
+create table person(pid varchar(50) primary key, fname varchar(50), lname varchar(50), hdate date, 
+edate date, descriminator char(1), did varchar(50) )
+
+create table department(did varchar(50) primary key, dname varchar(50), budget money, startdate date, pid varchar(50) 
+foreign key references person(pid))
+
+ALTER TABLE person
+ADD CONSTRAINT fk_dept_did
+FOREIGN KEY (did)
+REFERENCES department(did);
+
+
+create table semister(sid varchar(50) primary key, sname varchar(50))
+
+create table course(cid varchar(50) primary key, cname varchar(50), credits int)
+
+create table officeassignment(pid varchar(50) foreign key references person(pid), location varchar(50))
+
+create table enrollment(pid varchar(50) primary key foreign key references person(pid), did varchar(50) 
+primary key foreign key references department(did), sid varchar(50) primary key foreign key references semister(sid))
+
+create table enrollment(
+pid varchar(50),
+did varchar(50),
+sid varchar(50),
+
+primary key (pid,did,sid),
+foreign key (pid) references person(pid),
+foreign key (did) references department(did),
+foreign key (sid) references semister(sid))
+
+create table courseinstructor(
+pid varchar(50), 
+cid varchar(50),
+did varchar(50),
+sid varchar(50),
+
+primary key(pid,cid,did,sid),
+foreign key(pid) references person(pid),
+foreign key(cid) references course(cid),
+foreign key(did) references department(did),
+foreign key(sid) references semister(sid))
+
+create table coursedept(
+did varchar(50),
+cid varchar(50),
+
+primary key(did,cid),
+foreign key(did) references department(did),
+foreign key(cid) references course(cid))
+
